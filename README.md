@@ -115,9 +115,6 @@ Los fantasmas son los enemigos principales y cada uno tiene un comportamiento di
 
 ---
 
-### **7. Conclusión**
-Pac-Man es un juego de mecánicas simples pero con una gran profundidad estratégica. Su combinación de **movimiento de fantasmas**, **puntos**, **Power Pellets**, y **estrategias de evasión** lo han convertido en uno de los juegos más icónicos de la historia. 🚀
-
 ## Algoritmo
 
 ```mermaid
@@ -294,11 +291,11 @@ El diagrama combinado anterior integra los detalles de ambos modelos:
 ### **2. Analisis de la Aplicación**
 Se juego el videojuego Pacmana para analizar el comportamiento del mismo, así como planear la creación del mapa y la interacción de los personajes, para esto se siguió el siguiente orden
 
-![](Images\Imagen1.png)
+![](Images/Imagen1.png)
 
 1. Dividir el mapa del juego en celdas de 28 x 31 cuadriculas.
 
-![](Images\Imagen2.png)
+![](Images/Imagen2.png)
 
 2. A cada cuadricula le corresponde un valor, donde:
    - ` `: Espacio vacío
@@ -308,5 +305,5 @@ Se juego el videojuego Pacmana para analizar el comportamiento del mismo, así c
    - `R, T, S, N`: Fantasma Rojo, Turquesa, Rosa y Naranja respectivamente.
    - `P`: Pacman
 
-![](Images\Imagen3.png)
+![](Images/Imagen3.png)
 
