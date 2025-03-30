@@ -307,3 +307,449 @@ Se juego el videojuego Pacmana para analizar el comportamiento del mismo, así c
 
 ![](Images/Imagen3.png)
 
+
+## Algoritmo
+
+### Definir la matriz de caracteres que incluirá nuestrá lógica
+Definir la matriz inicial de Elementos con caracteres `mapa`
+
+#define ROWS 31
+#define COLS 28
+
+const char* mapa[ROWS] = {
+    "############################",
+    "#............##............#",
+    "#.####.#####.##.#####.####.#",
+    "#*####.#####.##.#####.####*#",
+    "#.####.#####.##.#####.####.#",
+    "#..........................#",
+    "#.####.##.########.##.####.#",
+    "#.####.##.########.##.####.#",
+    "#......##....##....##......#",
+    "######.##### ## #####.######",
+    "     #.##### ## #####.#     ",
+    "     #.##    R     ##.#     ",
+    "     #.## ###--### ##.#     ",
+    "######.## # TSN  # ##.######",
+    "      .   #      #   .      ",
+    "######.## #      # ##.######",
+    "     #.## ######## ##.#     ",
+    "     #.##          ##.#     ",
+    "     #.## ######## ##.#     ",
+    "######.## ######## ##.######",
+    "#............##............#",
+    "#.####.#####.##.#####.####.#",
+    "#.####.#####.##.#####.####.#",
+    "#*..##.......P........##..*#",
+    "###.##.##.########.##.##.###",
+    "###.##.##.########.##.##.###",
+    "#......##....##....##......#",
+    "#.##########.##.##########.#",
+    "#.##########.##.##########.#",
+    "#..........................#",
+    "############################"
+};
+
+El `#` represetna a una pared del juego, estas son constantes en el mapa.
+El `.` representa un pallet que puede ser comido por Pacman.
+El `*` representa un super pallet que puede ser comido por Pacman.
+El `R` representa al fantasma Rojo.
+El `T` representa al fantasma Turquesa.
+El `S` representa al fantasma Rosa.
+El `N` representa al fantasma Naranja.
+El `P` representa a Pacman.
+El `-` representa la puerta de donde se encuentran los fantasmas.`
+
+### 2. Graficar los elementos de la matriz lógica
+
+Imprimir el contenido actual de la matriz con un bucle
+
+Ahora haremos lo siguiente:
+
+Para este apartado haremos uso de la Programación Orientada a Objetos, donde tendremos el objeto Pared, Punto, SuperPunto, Fantasma y Pacman, cada uno con sus respectivos atributos y métodos.
+
+Iterando la matriz mapa
+    segun el caracter en (i,j)
+    `#` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Pared
+    `.` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Pallet
+    `*` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase SuperPallet
+    `R` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma
+    `T` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma
+    `S` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma
+    `N` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma`
+    `P` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Pacman; si la iteracion es divisible entre 0,1,2, o 9 dibujará a pacman con la boca cerrada (Figura 1), si la iteración es divisible entre 3,4, o 5 dibujará a pacman con la boca semiabierta (Figura 2), si la iteración es divisible entre 6,7, u 8 dibujará a pacman con la boca abierta (Figura 3). 
+
+
+### 3. Modificar los elementos de la matriz lógica 
+
+La matriz llamda `mapa` se actualiza tras cada iteración
+Iteración i inicia en 0
+   
+	- La letra P (Pacman) se mueve en la matriz según la tecla pulsada por el Usuario (W, A, S, D)
+	- El fantasma color Rojo R se mueve de forma aleatoria por el trablero usa su función mover()
+	- El fantasma de color Rosa S sale del cuadro donde se encuentran tras 5 iteraciones
+	- El fantasma de color Azul Turquesa T sale del cuadro donde se encuentran tras 25 iteraciones
+	- El fantasma de color Naranja N sale del cuadro donde se encuentran tras 50 iteraciones
+	Por ahora todos los fantasmas usan su función mover() que será de forma aleatoria, en lo que se programa un major algoritmo.
+   
+Si un fantasma toca o se sobre pone con Pacman, se termina el juego.
+
+Los elementos pueden moverse en cualquier posición del mapa sin embargo no pueden sobreponerse sobre una pared o atravesarlas `#`, por otro lado pacman
+si se encuenta con un `.` este se borra y aumenta el puntaje de Pacman, si se encuentra con un `*` los fantasmas cambian de color a blanco, esto indica que pueden ser comidos por Pacman, si Pacman se come a un fantasma, este regresa a su posición inicial.
+
+
+## Clases y Métodos
+Clase Punto: Tendra artibutros x,y que representan coordenadas y getters y setters
+Clase Pared: Tendra un atributo de tipo Punto, color y una matriz de 13x13 pixeles, será de color azul
+```
+#############
+#############
+#############
+#############
+#############
+#############
+#############
+#############
+#############
+#############
+#############
+#############
+#############
+```
+
+Clase Pallet: Tendra un atributo de tipo Punto y color y una matriz de 13x13 pixeles será de color naranja
+```
+             
+             
+             
+             
+     222     
+     222     
+     222     
+             
+             
+             
+             
+```
+
+Clase super Pallet: Tenra un atributo de tipo Punto, color y una matriz de 13x13 pixeles será de color blanco
+```
+             
+             
+             
+    22222    
+    22222    
+    22222    
+    22222    
+    22222    
+             
+             
+             
+```
+
+Clase Fantasma: Tendra un atributo de tipo Punto, color y una matriz de 13x13 pixeles será el color lo define el constructor, en todo lugar donde haya un 1, se mostrará el color del fantasma
+
+```
+    11111    
+  111111111  
+ 11111111111 
+ 11111111111 
+ 11111111111 
+1111111111111
+1111111111111
+1111111111111
+1111111111111
+1111111111111
+1111111111111
+111 11111 111
+ 1   1 1   1
+```
+
+Clase Pacman: Tendra un atrobuto Punto, color y una matriz de 13x13 pixeles será de color amarillo, en todo lugar donde haya un 1, se mostrará el color del pacman (amarrillo)}
+
+Figura 1
+```
+    11111    
+  111111111  
+ 11111111111
+ 11111111111 
+1111111111111
+1111111111111
+1111111111111
+1111111111111
+1111111111111
+ 11111111111 
+ 11111111111 
+  111111111  
+    11111    
+```
+
+Figura 2
+```
+    11111    
+  111111111  
+ 11111111111 
+ 11111111111 
+1111111111   
+1111111      
+1111         
+1111111      
+11111111111 
+ 11111111111 
+ 11111111111 
+  111111111  
+    11111    
+```
+
+Figura 3
+```
+    1111111  
+  111111111  
+ 111111111   
+ 11111111    
+1111111      
+11111        
+1111
+11111        
+1111111      
+ 11111111    
+ 111111111   
+  111111111  
+    1111111    
+````
+
+Clase Graficar usará la matriz del objeto, pero lo gráficara usando el algoritmo de Bresenham, el de Traslación, Rotación, Escalado.
+
+En el caso del pacman el de rotación será usado según la última tecla pulsada por el usuario o la dirección hacia la que va el pacman.
+
+El resto de objetos se dibujan igual en la pantalla.
+
+Las clases o algoritmos son los siguientes (puedes modificarlos si lo deseas):
+
+Punto.h
+```Cpp
+#pragma once
+
+class Punto {
+private:
+    int x, y;
+
+public:
+    Punto(int x, int y) : x(x), y(y) {}
+    int getX() const { return x; }
+    int getY() const { return y; }
+    void setX(int x) { this->x = x; }
+    void setY(int y) { this->y = y; }
+};
+```
+
+Bresenham.h
+```Cpp
+#pragma once
+
+// Clase Bresenham
+#include <iostream>
+#include <vector>
+#include "Punto.h"
+
+using namespace std;
+
+class Bresenham {
+public:
+    static vector<Punto> dibujarLinea(Punto p0, Punto p1) {
+        vector<Punto> puntos;
+        int dx = abs(p1.getX() - p0.getX()), dy = abs(p1.getY() - p0.getY());
+        int sx = (p0.getX() < p1.getX()) ? 1 : -1, sy = (p0.getY() < p1.getY()) ? 1 : -1;
+        int err = dx - dy;
+
+        while (true) {
+            puntos.push_back(Punto(p0.getX(), p0.getY()));
+            if (p0.getX() == p1.getX() && p0.getY() == p1.getY()) break;
+            int e2 = 2 * err;
+            if (e2 > -dy) { err -= dy; p0.setX(p0.getX() + sx); }
+            if (e2 < dx) { err += dx; p0.setY(p0.getY() + sy); }
+        }
+
+        return puntos;
+    }
+};
+
+```
+
+Escalado.h
+```Cpp
+#pragma once
+
+#include <vector>
+#include "Punto.h"
+#include <iostream>
+
+using namespace std;
+
+// Clase Escalado
+class Escalado {
+    public:
+        static vector<Punto> escalar(const vector<Punto>& puntos, float sx, float sy, Punto pivote) {
+            vector<Punto> resultado;
+            for (const auto& p : puntos) {
+                int x_nuevo = pivote.getX() + sx * (p.getX() - pivote.getX());
+                int y_nuevo = pivote.getY() + sy * (p.getY() - pivote.getY());
+                resultado.emplace_back(x_nuevo, y_nuevo);
+            }
+            return resultado;
+        }
+    };
+```
+
+Rotacion.h
+```Cpp
+#pragma once
+#include <cmath>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+#include <vector>
+#include "Punto.h"
+using namespace std;
+
+class Rotacion {
+public:
+    static vector<Punto> rotar(const vector<Punto>& puntos, double angulo, const Punto& pivote) {
+        vector<Punto> puntos_rotados;
+
+        // Convertir el ángulo de grados a radianes
+        double radianes = angulo * M_PI / 180.0;
+        double cosTheta = cos(radianes);
+        double sinTheta = sin(radianes);
+        
+        for (const auto& p : puntos) {
+            int x = p.getX() - pivote.getX();
+            int y = p.getY() - pivote.getY();
+            
+            int xNuevo = round(pivote.getX() + x * cosTheta - y * sinTheta);
+            int yNuevo = round(pivote.getY() + x * sinTheta + y * cosTheta);
+            
+            puntos_rotados.emplace_back(xNuevo, yNuevo);
+        }
+        return puntos_rotados;
+    }
+};
+
+```
+
+Traslacion.h
+```Cpp
+#pragma once
+
+#include <vector>
+#include "Punto.h"
+#include <iostream>
+
+using namespace std;
+
+class Traslacion {
+    public:
+        static vector<Punto> trasladar(const vector<Punto>& puntos, const Punto& T) {
+            vector<Punto> puntos_trasladados;
+            for (const auto& p : puntos) {
+                int x_nuevo = p.getX() + T.getX();
+                int y_nuevo = p.getY() + T.getY();
+                puntos_trasladados.emplace_back(x_nuevo, y_nuevo);
+            }
+            return puntos_trasladados;
+        }
+};
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include "graphics.h"
+#pragma comment(lib, "graphics.lib") // Enlaza graphics.lib automáticamente
+
+#define CELL_SIZE 13  // Tamaño de cada celda en píxeles
+#define ROWS 31
+#define COLS 28
+
+const char* mapa[ROWS] = {
+    "############################",
+    "#............##............#",
+    "#.####.#####.##.#####.####.#",
+    "#.####.#####.##.#####.####.#",
+    "#.####.#####.##.#####.####.#",
+    "#..........................#",
+    "#.####.##.########.##.####.#",
+    "#.####.##.########.##.####.#",
+    "#......##....##....##......#",
+    "######.##### ## #####.######",
+    "     #.##### ## #####.#     ",
+    "     #.##          ##.#     ",
+    "     #.## ###  ### ##.#     ",
+    "######.## #      # ##.######",
+    "      .   #      #   .      ",
+    "######.## #      # ##.######",
+    "     #.## ######## ##.#     ",
+    "     #.##          ##.#     ",
+    "     #.## ######## ##.#     ",
+    "######.## ######## ##.######",
+    "#............##............#",
+    "#.####.#####.##.#####.####.#",
+    "#.####.#####.##.#####.####.#",
+    "#...##................##...#",
+    "###.##.##.########.##.##.###",
+    "###.##.##.########.##.##.###",
+    "#......##....##....##......#",
+    "#.##########.##.##########.#",
+    "#.##########.##.##########.#",
+    "#..........................#",
+    "############################"
+};
+
+void dibujarMapa() {
+    for (int fila = 0; fila < ROWS; fila++) {
+        for (int col = 0; col < COLS; col++) {
+            int x = col * CELL_SIZE;
+            int y = fila * CELL_SIZE;
+
+            if (mapa[fila][col] == '#') {
+                setfillstyle(SOLID_FILL, BLUE);
+                bar(x, y, x + CELL_SIZE, y + CELL_SIZE);
+            }
+            else if (mapa[fila][col] == '.') {
+                setcolor(WHITE);
+                circle(x + CELL_SIZE / 2, y + CELL_SIZE / 2, 2);
+                floodfill(x + CELL_SIZE / 2, y + CELL_SIZE / 2, WHITE);
+            }
+        }
+    }
+}
+
+int main() {
+    int width = COLS * CELL_SIZE;
+    int height = ROWS * CELL_SIZE;
+
+    initwindow(width, height, "Pac-Man");
+    dibujarMapa();
+    system("pause");
+    closegraph();
+    return 0;
+}
