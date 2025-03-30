@@ -15,6 +15,7 @@
 #include "include/Fantasma.h"
 #include "include/Pacman.h"
 #include "include/Graficar.h"
+#include "include/Colisiones.h"
 
 #pragma comment(lib, "graphics.lib") // Vincula la biblioteca graphics.lib
 
@@ -135,37 +136,9 @@ int main() {
 
     bool running = true;
     int iteration = 0;
+    
     while (running) {
-        // Dibuja en la página oculta
-        setactivepage(currentPage);
-        // Primero, copia el mapa estático (ya dibujado en mapaPage) al buffer actual
-        // La función readimagefile permite copiar una porción de la pantalla.
-        // Guardamos el mapa estático en un rectángulo que abarca toda la ventana.
-        readimagefile("",
-            0, 0, width, height); // Si tu versión lo permite, o bien, dibuja nuevamente el mapa estático
-        // Si readimagefile no resulta adecuado, puedes volver a dibujar el mapa estático
-        dibujarMapaEstatico(paredes, pallets, superPallets);
-
-        // Dibujar elementos dinámicos
-        for (auto& f : fantasmas)
-            Graficar::dibujar(f);
-        Graficar::dibujar(pacman);
-
-        // Actualiza la página visual
-        setvisualpage(currentPage);
-
-        // Alterna la página para el siguiente cuadro
-        currentPage = 1 - currentPage;
-
-        delay(100);
-        iteration++;
-        pacman.actualizarFrame();
-
-        // Mover fantasmas de forma aleatoria
-        for (auto& f : fantasmas)
-            f.mover();
-
-        // Procesar entrada para mover a Pacman (W, A, S, D; ESC para salir)
+        // 1. Procesar entrada para mover a Pacman (W, A, S, D; ESC para salir)
         if (kbhit()) {
             int tecla = getch();
             if (tecla == 27) { // ESC
@@ -175,6 +148,50 @@ int main() {
                 pacman.mover(tecla);
             }
         }
+
+        // 2. Actualizar el frame de Pacman (para la animación) y mover a los fantasmas
+        pacman.actualizarFrame();
+        for (auto& f : fantasmas)
+            f.mover();
+
+        // 3. Procesar colisiones entre Pacman y Pallets/SuperPallets
+        // Colisión con Pallets
+        for (auto it = pallets.begin(); it != pallets.end(); ) {
+            if (it->getPos().getX() == pacman.getPos().getX() &&
+                it->getPos().getY() == pacman.getPos().getY()) {
+                it = pallets.erase(it);
+                // Aquí podrías incrementar el puntaje o reproducir sonido.
+            }
+            else {
+                ++it;
+            }
+        }
+        // Colisión con SuperPallets
+        for (auto it = superPallets.begin(); it != superPallets.end(); ) {
+            if (it->getPos().getX() == pacman.getPos().getX() &&
+                it->getPos().getY() == pacman.getPos().getY()) {
+                it = superPallets.erase(it);
+                // Aquí podrías poner a los fantasmas en modo vulnerable y actualizar el puntaje.
+            }
+            else {
+                ++it;
+            }
+        }
+
+        // 4. Dibujar la escena (mapa estático y objetos dinámicos)
+        cleardevice();
+        setactivepage(currentPage);
+        // Se dibuja el mapa estático (paredes, pallets y superPallets)
+        dibujarMapaEstatico(paredes, pallets, superPallets);
+        // Se dibujan los elementos dinámicos
+        for (auto& f : fantasmas)
+            Graficar::dibujar(f);
+        Graficar::dibujar(pacman);
+        setvisualpage(currentPage);
+        currentPage = 1 - currentPage;
+
+        delay(100);
+        iteration++;
     }
 
     closegraph();

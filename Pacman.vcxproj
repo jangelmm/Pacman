@@ -131,6 +131,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Bresenham.h" />
+    <ClInclude Include="include\Colisiones.h" />
+    <ClInclude Include="include\Constantes.h" />
     <ClInclude Include="include\Escalado.h" />
     <ClInclude Include="include\Fantasma.h" />
     <ClInclude Include="include\Graficar.h" />

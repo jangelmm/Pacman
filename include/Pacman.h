@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include "Punto.h"
+#include "Colisiones.h"
 
 using namespace std;
 
@@ -82,17 +83,17 @@ public:
         int newX = pos.getX();
         int newY = pos.getY();
         switch (tecla) {
-        case 'w':
-        case 'W': newY -= 1; break;
-        case 's':
-        case 'S': newY += 1; break;
-        case 'a':
-        case 'A': newX -= 1; break;
-        case 'd':
-        case 'D': newX += 1; break;
+        case 'w': case 'W': newY -= 1; break;
+        case 's': case 'S': newY += 1; break;
+        case 'a': case 'A': newX -= 1; break;
+        case 'd': case 'D': newX += 1; break;
         default: break;
         }
-        pos.setX(newX);
-        pos.setY(newY);
+        // Solo actualiza si la nueva posición no es una pared
+        if (sePuedeMover(newX, newY))
+        {
+            pos.setX(newX);
+            pos.setY(newY);
+        }
     }
 };

@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include "Punto.h"
+#include "Colisiones.h"
 
 using namespace std;
 
@@ -43,7 +44,11 @@ public:
         case 2: newY += 1; break;
         case 3: newY -= 1; break;
         }
-        pos.setX(newX);
-        pos.setY(newY);
+        // Solo mueve si el destino no es pared
+        if (sePuedeMover(newX, newY))
+        {
+            pos.setX(newX);
+            pos.setY(newY);
+        }
     }
 };

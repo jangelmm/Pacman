@@ -3,13 +3,12 @@
 #include <string>
 #include "Punto.h"
 #include "..\graphics.h"
+#include "Constantes.h"
 
 using namespace std;
 
 class Graficar {
 public:
-    static const int CELL_SIZE = 13;
-
     // Función plantilla que dibuja cualquier objeto que tenga getMatrix(), getPos() y getColor()
     template<typename T>
     static void dibujar(const T& obj) {
