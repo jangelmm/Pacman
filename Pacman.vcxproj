@@ -129,6 +129,19 @@
   <ItemGroup>
     <ClCompile Include="Pacman.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Bresenham.h" />
+    <ClInclude Include="include\Escalado.h" />
+    <ClInclude Include="include\Fantasma.h" />
+    <ClInclude Include="include\Graficar.h" />
+    <ClInclude Include="include\Pacman.h" />
+    <ClInclude Include="include\Pallet.h" />
+    <ClInclude Include="include\Pared.h" />
+    <ClInclude Include="include\Punto.h" />
+    <ClInclude Include="include\Rotacion.h" />
+    <ClInclude Include="include\SuperPallet.h" />
+    <ClInclude Include="include\Traslacion.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

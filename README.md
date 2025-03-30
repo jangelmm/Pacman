@@ -519,6 +519,12 @@ Figura 3
 ````
 
 Clase Graficar usará la matriz del objeto, pero lo gráficara usando el algoritmo de Bresenham, el de Traslación, Rotación, Escalado.
+Dependiendo del numero 
+1:  Pinta con el color del objeto en la matriz de 13x13 pixeles
+2: Pinta de color azul
+3: Pinta de color Blanco 
+
+
 
 En el caso del pacman el de rotación será usado según la última tecla pulsada por el usuario o la dirección hacia la que va el pacman.
 
