@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <string>
+#include <Windows.h>
 
 #include "include/Punto.h"
 #include "include/Pared.h"
@@ -72,7 +73,17 @@ int main() {
     srand(time(0));
     int width = COLS * CELL_SIZE;
     int height = ROWS * CELL_SIZE;
-    initwindow(width, height, "Pac-Man");
+    
+    // Obtener resolución de la pantalla
+    int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+    // Calcular coordenadas para centrar la ventana
+    int xPos = (screenWidth - width) / 2;
+    int yPos = (screenHeight - height) / 2;
+
+    // Inicializar la ventana en el centro de la pantalla
+    initwindow(width, height, "Pac-Man", xPos, yPos);
 
     // Vectores de elementos del juego
     vector<Pared> paredes;
