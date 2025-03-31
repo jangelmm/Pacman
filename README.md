@@ -201,15 +201,15 @@ Ahora haremos lo siguiente:
 Para este apartado haremos uso de la Programación Orientada a Objetos, donde tendremos el objeto Pared, Punto, SuperPunto, Fantasma y Pacman, cada uno con sus respectivos atributos y métodos.
 
 Iterando la matriz mapa
-    segun el caracter en (i,j)
-    `#` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Pared
-    `.` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Pallet
-    `*` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase SuperPallet
-    `R` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma
-    `T` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma
-    `S` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma
-    `N` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma`
-    `P` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Pacman; si la iteracion es divisible entre 0,1,2, o 9 dibujará a pacman con la boca cerrada (Figura 1), si la iteración es divisible entre 3,4, o 5 dibujará a pacman con la boca semiabierta (Figura 2), si la iteración es divisible entre 6,7, u 8 dibujará a pacman con la boca abierta (Figura 3). 
+- segun el caracter en (i,j)
+- `#` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Pared
+- `.` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Pallet
+- `*` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase SuperPallet
+- `R` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma
+- `T` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma
+- `S` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma
+- `N` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma`
+- `P` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Pacman; si la iteracion es divisible entre 0,1,2, o 9 dibujará a pacman con la boca cerrada (Figura 1), si la iteración es divisible entre 3,4, o 5 dibujará a pacman con la boca semiabierta (Figura 2), si la iteración es divisible entre 6,7, u 8 dibujará a pacman con la boca abierta (Figura 3). 
 
 
 ### 3. Modificar los elementos de la matriz lógica 
