@@ -112,10 +112,6 @@ Los fantasmas son los enemigos principales y cada uno tiene un comportamiento di
 - **El nombre "Pac-Man" viene del japonés "Paku-Paku", que representa el sonido de abrir y cerrar la boca.**
 - **El primer "Easter Egg" de videojuegos ocurrió en Pac-Man cuando se descubrió que los fantasmas seguían patrones predecibles.**
 
----
-
-## Algoritmo
-
 ## Codificación
 
 ### Prepación del Entorno
