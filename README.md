@@ -7,7 +7,6 @@ Pac-Man es un clásico juego de arcade lanzado en 1980 por Namco. Se caracteriza
 
 Pac-Man es un juego de laberinto en el que el jugador controla a Pac-Man, una criatura amarilla en forma de círculo con una boca que se abre y cierra, cuyo objetivo es recorrer un laberinto mientras come puntos y evita ser capturado por fantasmas. El juego tiene múltiples niveles, cada uno con un diseño idéntico del laberinto pero con un aumento en la dificultad debido a la velocidad de los enemigos.
 
----
 
 ### **2. Objetos en el Juego**
 A continuación, se detallan todos los elementos presentes en el juego y su función:
