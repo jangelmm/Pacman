@@ -362,3 +362,4 @@ En el caso del pacman el de rotación será usado según la última tecla pulsad
 El resto de objetos se dibujan igual en la pantalla.
 
 ### Otros algoritmos
+Holla Mundo
