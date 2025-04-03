@@ -11,10 +11,12 @@ private:
     Punto pos;
     int color;
     int frame; // Para animación
+    double angulo; // Ángulo de rotación
 public:
-    Pacman(Punto pos) : pos(pos), color(YELLOW), frame(0) {}
+    Pacman(Punto pos) : pos(pos), color(YELLOW), frame(0), angulo(0.0) {}
     Punto getPos() const { return pos; }
     int getColor() const { return color; }
+    double getAngulo() const { return angulo; } // Nuevo método para obtener el ángulo
 
     // Retorna la matriz según el estado de animación
     vector<string> getMatrix() const {
@@ -78,20 +80,32 @@ public:
 
     void actualizarFrame() { frame++; }
 
-    // Movimiento según tecla (W, A, S, D)
+    // Movimiento según tecla (W, A, S, D) con rotación
     void mover(char tecla) {
         int newX = pos.getX();
         int newY = pos.getY();
         switch (tecla) {
-        case 'w': case 'W': newY -= 1; break;
-        case 's': case 'S': newY += 1; break;
-        case 'a': case 'A': newX -= 1; break;
-        case 'd': case 'D': newX += 1; break;
-        default: break;
+        case 'w': case 'W':
+            newY -= 1;
+            angulo = 270; // Rotación hacia arriba
+            break;
+        case 's': case 'S':
+            newY += 1;
+            angulo = 90; // Rotación hacia abajo
+            break;
+        case 'a': case 'A':
+            newX -= 1;
+            angulo = 180; // Rotación hacia la izquierda
+            break;
+        case 'd': case 'D':
+            newX += 1;
+            angulo = 0; // Rotación hacia la derecha
+            break;
+        default:
+            break;
         }
         // Solo actualiza si la nueva posición no es una pared
-        if (sePuedeMover(newX, newY))
-        {
+        if (sePuedeMover(newX, newY)) {
             pos.setX(newX);
             pos.setY(newY);
         }

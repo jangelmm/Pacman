@@ -60,6 +60,62 @@ const char* mapa[ROWS] = {
     "############################"
 };
 
+// Definición de la función para dibujar una vida con forma de Pac-Man semiabierto
+void dibujarPacmanVida(int x, int y) {
+    setcolor(YELLOW);
+    setfillstyle(SOLID_FILL, YELLOW);
+
+    // Matriz de Pac-Man semiabierto
+    string matriz[13] = {
+        "    11111    ",
+        "  111111111  ",
+        " 11111111111 ",
+        " 11111111111 ",
+        "1111111111   ",
+        "1111111      ",
+        "1111         ",
+        "1111111      ",
+        "11111111111  ",
+        " 11111111111 ",
+        " 11111111111 ",
+        "  111111111  ",
+        "    11111    "
+    };
+
+    int pixelSize = 2; // Tamaño del píxel para formar la figura
+
+    for (size_t i = 0; i < 13; i++) {
+        for (size_t j = 0; j < matriz[i].size(); j++) {
+            if (matriz[i][j] == '1') {
+                bar(x + j * pixelSize, y + i * pixelSize, x + (j + 1) * pixelSize, y + (i + 1) * pixelSize);
+            }
+        }
+    }
+}
+
+void dibujarHUD(int vidas) {
+    setcolor(WHITE);
+
+    int baseY = ROWS * CELL_SIZE + 10;
+
+    // Dibujar iconos de vidas
+    int pacmanX = 10;
+    int pacmanY = baseY;
+    for (int i = 0; i < vidas; i++) {
+        dibujarPacmanVida(pacmanX + (i * 30), pacmanY);
+    }
+
+    // Mostrar texto debajo de las vidas
+    char puntuacion[] = "PUNTUACION: 00        HIGH SCORE: 10000"; // OJO: Modificar aqui para actualizar puntuacion
+    char titulo[] = "Pacman";
+
+    settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 2);
+    outtextxy(10, baseY + 40, titulo);
+    settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 1);
+    outtextxy(10, baseY + 70, puntuacion);
+}
+
+
 // Dibuja el mapa estático en una página
 void dibujarMapaEstatico(const vector<Pared>& paredes,
     const vector<Pallet>& pallets,
@@ -71,9 +127,11 @@ void dibujarMapaEstatico(const vector<Pared>& paredes,
 
 int main() {
     srand(time(0));
-    int width = COLS * CELL_SIZE;
-    int height = ROWS * CELL_SIZE;
     
+    int offsetHUD = 100; // Espacio para el HUD en la parte inferior
+    int width = COLS * CELL_SIZE;
+    int height = ROWS * CELL_SIZE + offsetHUD + 10; // Se aumentó la altura total
+
     // Obtener resolución de la pantalla
     int screenWidth = GetSystemMetrics(SM_CXSCREEN);
     int screenHeight = GetSystemMetrics(SM_CYSCREEN);
@@ -120,6 +178,7 @@ int main() {
 
     int currentPage = 1;
     bool running = true;
+    int vidas = 4; // Número de vidas inicial
 
     while (running) {
         setactivepage(currentPage);
@@ -128,6 +187,9 @@ int main() {
         // Dibujar elementos dinámicos
         for (auto& f : fantasmas) Graficar::dibujar(f);
         Graficar::dibujar(pacman);
+
+        // Dibujar la información en pantalla
+        dibujarHUD(vidas);
 
         setvisualpage(currentPage);
         currentPage = 1 - currentPage;
@@ -143,25 +205,18 @@ int main() {
             else pacman.mover(tecla);
         }
 
-        // Eliminar pallets al ser comidos
-        for (auto it = pallets.begin(); it != pallets.end(); ) {
-            if (it->getPos().getX() == pacman.getPos().getX() &&
-                it->getPos().getY() == pacman.getPos().getY()) {
-                it = pallets.erase(it);
-            }
-            else {
-                ++it;
-            }
-        }
+        // Detectar si Pac-Man se come un SuperPallet
+        for (size_t i = 0; i < superPallets.size(); i++) {
+            if (pacman.getPos().getX() == superPallets[i].getPos().getX() &&
+                pacman.getPos().getY() == superPallets[i].getPos().getY()) {
 
-        // Eliminar superPallets al ser comidos
-        for (auto it = superPallets.begin(); it != superPallets.end(); ) {
-            if (it->getPos().getX() == pacman.getPos().getX() &&
-                it->getPos().getY() == pacman.getPos().getY()) {
-                it = superPallets.erase(it);
-            }
-            else {
-                ++it;
+                // Borrar SuperPallet
+                superPallets.erase(superPallets.begin() + i);
+
+                // Activar modo azul en todos los fantasmas
+                for (auto& fantasma : fantasmas) {
+                    fantasma.activarModoAzul();
+                }
             }
         }
     }

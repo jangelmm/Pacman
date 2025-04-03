@@ -119,7 +119,7 @@ Los fantasmas son los enemigos principales y cada uno tiene un comportamiento di
 **Instalar Visual Studio 2022**: Descargar e instalar Visual Studio 2022 Community Edition y Tener las librerías de gráficos instaladas. [Descargar Visual Studio 2022 y Usar graphics.h](https://github.com/jangelmm/graphics.h-en-Visual-Studio.git).]
 
 ### **2. Analisis de la Aplicación**
-Se juego el videojuego Pacmana para analizar el comportamiento del mismo, así como planear la creación del mapa y la interacción de los personajes, para esto se siguió el siguiente orden
+Se jugo el videojuego Pacman para analizar el comportamiento del mismo, así como planear la creación del mapa y la interacción de los personajes, para esto se siguió el siguiente orden
 
 ![](Images/Imagen1.png)
 
@@ -360,3 +360,5 @@ Dependiendo del numero
 
 En el caso del pacman el de rotación será usado según la última tecla pulsada por el usuario o la dirección hacia la que va el pacman.
 El resto de objetos se dibujan igual en la pantalla.
+
+### Otros algoritmos
