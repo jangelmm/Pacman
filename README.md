@@ -363,4 +363,3 @@ El resto de objetos se dibujan igual en la pantalla.
 
 ### Otros algoritmos
 Holla Mundo
-hhahhkajbkjs
