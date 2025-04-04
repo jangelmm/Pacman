@@ -148,10 +148,10 @@ int main() {
             case '#': paredes.push_back(Pared(pos)); break;
             case '.': pallets.push_back(Pallet(pos)); break;
             case '*': superPallets.push_back(SuperPallet(pos)); break;
-            case 'R': fantasmas.push_back(Fantasma(pos, RED)); break;
-            case 'T': fantasmas.push_back(Fantasma(pos, CYAN)); break;
-            case 'S': fantasmas.push_back(Fantasma(pos, MAGENTA)); break;
-            case 'N': fantasmas.push_back(Fantasma(pos, LIGHTRED)); break;
+            case 'R': fantasmas.push_back(Fantasma(pos, COLOR(255, 0, 0))); break;
+            case 'T': fantasmas.push_back(Fantasma(pos, COLOR(0, 255, 255))); break;
+            case 'S': fantasmas.push_back(Fantasma(pos, COLOR(255, 0, 255))); break;
+            case 'N': fantasmas.push_back(Fantasma(pos, COLOR(255, 165, 0))); break;
             case 'P': pacman = Pacman(pos); break;
             }
         }

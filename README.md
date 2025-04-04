@@ -1,322 +1,124 @@
-﻿# Pacman
+﻿
+# Pac-Man
+
+## Información del Proyecto
+
+**Creadores:**
+
+- Diego García Jennifer
+- Martínez Mendoza Jesús Ángel
+- Caballero García Nayeli Itzel
+
+**Asignatura:** Graficación Por Computadoras  
+
+**Institución:** TecNM Campus Oaxaca - Instituto Tecnológico de Oaxaca  
+
+**Docente:** Matadamas Ortiz Idarh Claudio
+
+**Periodo:** ENE-JUN, 2025
+
+---
 
 ## Descripción del Juego
 
-Pac-Man es un clásico juego de arcade lanzado en 1980 por Namco. Se caracteriza por un diseño simple pero con una jugabilidad rica en estrategia, patrones de movimiento y mecánicas bien definidas. Vamos a desglosar el juego en todos sus componentes, condiciones iniciales y reglas con el mayor nivel de detalle posible.
+Pac-Man es un clásico videojuego de arcade lanzado originalmente en 1980 por Namco. El juego se centra en el control de Pac-Man, una figura amarilla que se desplaza por un laberinto comiendo pellets y evitando a cuatro fantasmas de colores (Rojo, Turquesa, Rosa y Naranja). A lo largo del juego, se introducen elementos como súper pellets, que, al ser consumidos, permiten a Pac-Man volverse temporalmente capaz de comer a los fantasmas.
 
+El objetivo principal es recorrer el laberinto, comer todos los pellets y evitar ser capturado por los fantasmas. El juego incrementa su dificultad en niveles sucesivos, modificando la velocidad y patrones de los enemigos.
 
-Pac-Man es un juego de laberinto en el que el jugador controla a Pac-Man, una criatura amarilla en forma de círculo con una boca que se abre y cierra, cuyo objetivo es recorrer un laberinto mientras come puntos y evita ser capturado por fantasmas. El juego tiene múltiples niveles, cada uno con un diseño idéntico del laberinto pero con un aumento en la dificultad debido a la velocidad de los enemigos.
-
-
-### **2. Objetos en el Juego**
-A continuación, se detallan todos los elementos presentes en el juego y su función:
-
-#### **2.1. Pac-Man (El protagonista)**
-- **Forma:** Circular, con una boca animada que se abre y cierra al moverse.
-- **Movimiento:** Se desplaza en cuatro direcciones (arriba, abajo, izquierda, derecha) sin detenerse, solo cambia de dirección cuando el jugador lo indica.
-- **Colisión con paredes:** Pac-Man no puede atravesar paredes y se mueve por caminos definidos.
-- **Objetivo:** Comer todos los puntos del laberinto sin ser atrapado por los fantasmas.
-
-#### **2.2. El Laberinto**
-- **Tamaño fijo:** El laberinto es siempre el mismo en todas las partidas.
-- **Diseño:** Contiene pasillos por donde Pac-Man y los fantasmas se pueden mover, además de paredes que delimitan el camino.
-- **Puertas de túnel:** Existen dos pasajes en los laterales del laberinto que permiten a Pac-Man y a los fantasmas aparecer por el lado opuesto al entrar en uno.
-
-#### **2.3. Puntos (Pellets)**
-- **Cantidad:** Existen 240 puntos en el laberinto al inicio del juego.
-- **Valor:** Cada punto vale 10 puntos.
-- **Condición de victoria:** Para completar un nivel, Pac-Man debe comer todos los puntos.
-
-#### **2.4. Súper Puntos (Power Pellets)**
-- **Cantidad:** 4 en cada nivel, ubicados en las esquinas del laberinto.
-- **Efecto:** Hacen que los fantasmas se vuelvan vulnerables y puedan ser comidos por Pac-Man.
-- **Duración:** Varía según el nivel (se reduce en niveles avanzados).
-- **Puntaje:** El primer fantasma comido vale 200 puntos, el segundo 400, el tercero 800 y el cuarto 1600.
-
-#### **2.5. Fantasmas (Ghosts)**
-Los fantasmas son los enemigos principales y cada uno tiene un comportamiento distinto basado en un conjunto de reglas predefinidas. Hay cuatro fantasmas en el juego:
-
-| Fantasma  | Color  | Nombre Japonés | Estrategia |
-|-----------|--------|---------------|------------|
-| Blinky    | Rojo   | Oikake (Chase) | Persigue a Pac-Man directamente. |
-| Pinky     | Rosa   | Machibuse (Ambush) | Intenta adelantarse a donde se moverá Pac-Man. |
-| Inky      | Azul   | Kimagure (Fickle) | Movimiento impredecible, calculado con una combinación de Blinky y la posición de Pac-Man. |
-| Clyde     | Naranja| Otoboke (Scatter) | A veces persigue a Pac-Man, otras veces huye a la esquina inferior izquierda. |
-
-- **Estados de los fantasmas:**
-  1. **Scatter Mode (Modo disperso)**: Se mueven a sus esquinas respectivas en intervalos definidos.
-  2. **Chase Mode (Modo persecución)**: Intentan capturar a Pac-Man.
-  3. **Frightened Mode (Modo vulnerable)**: Cuando Pac-Man come un Power Pellet, los fantasmas se vuelven azules y pueden ser comidos.
-  4. **Eaten Mode (Modo de regreso)**: Cuando un fantasma es comido, regresa a la base (Ghost House) y reaparece en modo normal.
-
-#### **2.6. Frutas (Bonos de puntos)**
-- **Aparecen dos veces por nivel en la parte central del laberinto.**
-- **Tipos de frutas y sus puntajes:**
-
-| Fruta     | Nivel de aparición | Puntos |
-|-----------|-------------------|--------|
-| Cereza    | 1                 | 100    |
-| Fresa     | 2                 | 300    |
-| Naranja   | 3-4               | 500    |
-| Manzana   | 5-6               | 700    |
-| Uva       | 7-8               | 1000   |
-| Galaxian  | 9-10              | 2000   |
-| Campana   | 11-12             | 3000   |
-| Llave     | 13+               | 5000   |
-
----
-
-### **3. Condiciones Iniciales del Juego**
-1. **Pac-Man comienza en la parte central inferior del laberinto.**
-2. **Los fantasmas inician dentro de la "Ghost House" y salen después de unos segundos.**
-3. **El juego comienza en el modo "Scatter" durante unos segundos antes de que los fantasmas entren en el modo de persecución.**
-4. **El jugador tiene 3 vidas al inicio del juego.**
-5. **El objetivo es comer todos los puntos del nivel para avanzar al siguiente.**
-6. **Al obtener 10,000 puntos, el jugador recibe una vida extra.**
-
----
-
-### **4. Lógica del Juego**
-#### **4.1. Movimiento de Pac-Man**
-- **El jugador usa las teclas de dirección para mover a Pac-Man.**
-- **Pac-Man se mueve continuamente y solo cambia de dirección si no hay una pared en el camino.**
-- **Si se encuentra con un Power Pellet, los fantasmas entran en el modo asustado.**
-
-#### **4.2. Movimiento de los Fantasmas**
-- **Cada fantasma tiene su propia lógica de movimiento.**
-- **Alternan entre los modos "Scatter" y "Chase" según un temporizador.**
-- **Si Pac-Man come un Power Pellet, los fantasmas se vuelven vulnerables y pueden ser comidos.**
-- **Si un fantasma es comido, regresa a la Ghost House y reaparece.**
-
-#### **4.3. Fin del Juego**
-- **El juego termina si Pac-Man pierde todas sus vidas.**
-- **Si el jugador termina un nivel, el siguiente comienza con la misma disposición del laberinto, pero los fantasmas se vuelven más rápidos.**
-- **Después de cierto nivel, los Power Pellets dejan de afectar a los fantasmas.**
-
----
-
-### **5. Estrategias y Patrones**
-#### **5.1. Técnicas de Juego**
-- **"Cornering"**: Aprovechar las esquinas para cambiar de dirección rápidamente.
-- **"Ghost Grouping"**: Agrupar a los fantasmas para maximizar los puntos al comérselos.
-- **"Pattern Exploitation"**: En los primeros niveles, los movimientos de los fantasmas son predecibles y pueden ser explotados con rutas óptimas.
-
-#### **5.2. El Nivel de la Muerte (256)**
-- **Pac-Man tiene un bug en el nivel 256** debido a un desbordamiento de memoria.
-- **El lado derecho del laberinto aparece corrupto e imposible de jugar.**
-
----
-
-### **6. Curiosidades**
-- **Pac-Man fue diseñado para atraer a las jugadoras**, ya que la mayoría de los juegos en los 80 eran de disparos.
-- **El nombre "Pac-Man" viene del japonés "Paku-Paku", que representa el sonido de abrir y cerrar la boca.**
-- **El primer "Easter Egg" de videojuegos ocurrió en Pac-Man cuando se descubrió que los fantasmas seguían patrones predecibles.**
-
-## Codificación
-
-### Prepación del Entorno
-### **1. IDE y Librerías**
-**Instalar Visual Studio 2022**: Descargar e instalar Visual Studio 2022 Community Edition y Tener las librerías de gráficos instaladas. [Descargar Visual Studio 2022 y Usar graphics.h](https://github.com/jangelmm/graphics.h-en-Visual-Studio.git).]
-
-### **2. Analisis de la Aplicación**
-Se jugo el videojuego Pacman para analizar el comportamiento del mismo, así como planear la creación del mapa y la interacción de los personajes, para esto se siguió el siguiente orden
 
 ![](Images/Imagen1.png)
 
-1. Dividir el mapa del juego en celdas de 28 x 31 cuadriculas.
+---
+
+## Estructura del Proyecto
+
+El proyecto está diseñado usando Programación Orientada a Objetos y se compone de múltiples clases que representan los distintos elementos del juego:
+
+- **Punto:** Representa coordenadas (x, y) y es la base para la ubicación de todos los objetos.    
+- **Pared:** Representa los muros del laberinto. Cada pared se dibuja como una celda de 13x13 píxeles, con un color fijo (azul).
+- **Pallet:** Representa los pellets comunes que Pac-Man debe comer. Se dibujan con un diseño reducido en una celda de 13x13, con un color (naranja).
+- **SuperPallet:** Representa los súper pellets (power pellets) que otorgan a Pac-Man la habilidad de comer fantasmas. Se dibujan en blanco.
+- **Fantasma:** Representa a cada uno de los enemigos. Cada fantasma posee un color y una matriz de 13x13 que determina su apariencia.
+- **Pac-Man:** Representa al protagonista, con distintas figuras de animación (boca cerrada, semiabierta y abierta) que se muestran en función del estado de animación.
+- **Graficar:** Esta clase se encarga de tomar la “matriz lógica” de cada objeto y dibujarla en la pantalla. Se apoya en algoritmos de transformación (rotación, escalado y traslación) y, opcionalmente, en el algoritmo de Bresenham para dibujar líneas o contornos.
+
+Adicionalmente, se incluyen clases de transformación geométrica:
+
+- **Rotacion:** Rota un conjunto de puntos alrededor de un pivote.
+- **Escalado:** Redimensiona un conjunto de puntos según factores de escala.
+- **Traslacion:** Desplaza un conjunto de puntos.
+- **(Bresenham):** Permite dibujar líneas entre puntos (opcional para contornear figuras).    
+
+---
+
+## Algoritmo Lógico
+
+La lógica del juego se basa en el uso de una matriz de caracteres que representa el laberinto. Cada celda de la matriz (definida como 28 columnas por 31 filas) contiene un carácter que indica el tipo de elemento:
 
 ![](Images/Imagen2.png)
 
-2. A cada cuadricula le corresponde un valor, donde:
-   - ` `: Espacio vacío
-   - `#`: Pared
-   - `.`: Pellet
-   - `*`: Super Punto
-   - `R, T, S, N`: Fantasma Rojo, Turquesa, Rosa y Naranja respectivamente.
-   - `P`: Pacman
+- `#`: Pared.    
+- `.`: Pellet.
+- `*`: Súper Pellet.
+- `R`, `T`, `S`, `N`: Fantasmas (Rojo, Turquesa, Rosa y Naranja, respectivamente).
+- `P`: Pac-Man.
+- `-`: Puerta del "Ghost House" (donde se encuentran los fantasmas).
 
 ![](Images/Imagen3.png)
 
+**Lógica del juego:**
 
-## Algoritmo
-
-### Definir la matriz de caracteres que incluirá nuestrá lógica
-Definir la matriz inicial de Elementos con caracteres `mapa`
-
-```
-#define ROWS 31
-#define COLS 28
-
-const char* mapa[ROWS] = {
-    "############################",
-    "#............##............#",
-    "#.####.#####.##.#####.####.#",
-    "#*####.#####.##.#####.####*#",
-    "#.####.#####.##.#####.####.#",
-    "#..........................#",
-    "#.####.##.########.##.####.#",
-    "#.####.##.########.##.####.#",
-    "#......##....##....##......#",
-    "######.##### ## #####.######",
-    "     #.##### ## #####.#     ",
-    "     #.##    R     ##.#     ",
-    "     #.## ###--### ##.#     ",
-    "######.## # TSN  # ##.######",
-    "      .   #      #   .      ",
-    "######.## #      # ##.######",
-    "     #.## ######## ##.#     ",
-    "     #.##          ##.#     ",
-    "     #.## ######## ##.#     ",
-    "######.## ######## ##.######",
-    "#............##............#",
-    "#.####.#####.##.#####.####.#",
-    "#.####.#####.##.#####.####.#",
-    "#*..##.......P........##..*#",
-    "###.##.##.########.##.##.###",
-    "###.##.##.########.##.##.###",
-    "#......##....##....##......#",
-    "#.##########.##.##########.#",
-    "#.##########.##.##########.#",
-    "#..........................#",
-    "############################"
-};
-```
-
-El `#` represetna a una pared del juego, estas son constantes en el mapa.
-El `.` representa un pallet que puede ser comido por Pacman.
-El `*` representa un super pallet que puede ser comido por Pacman.
-El `R` representa al fantasma Rojo.
-El `T` representa al fantasma Turquesa.
-El `S` representa al fantasma Rosa.
-El `N` representa al fantasma Naranja.
-El `P` representa a Pacman.
-El `-` representa la puerta de donde se encuentran los fantasmas.`
-
-### 2. Graficar los elementos de la matriz lógica
-
-Imprimir el contenido actual de la matriz con un bucle
-
-Ahora haremos lo siguiente:
-
-Para este apartado haremos uso de la Programación Orientada a Objetos, donde tendremos el objeto Pared, Punto, SuperPunto, Fantasma y Pacman, cada uno con sus respectivos atributos y métodos.
-
-Iterando la matriz mapa
-- segun el caracter en (i,j)
-- `#` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Pared
-- `.` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Pallet
-- `*` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase SuperPallet
-- `R` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma
-- `T` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma
-- `S` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma
-- `N` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Fantasma`
-- `P` llamar el método estatico dibujar de la clase Graficar que resibirá un objeto de la clase Pacman; si la iteracion es divisible entre 0,1,2, o 9 dibujará a pacman con la boca cerrada (Figura 1), si la iteración es divisible entre 3,4, o 5 dibujará a pacman con la boca semiabierta (Figura 2), si la iteración es divisible entre 6,7, u 8 dibujará a pacman con la boca abierta (Figura 3). 
-
-
-### 3. Modificar los elementos de la matriz lógica 
-
-La matriz llamda `mapa` se actualiza tras cada iteración
-Iteración i inicia en 0
-   
-	- La letra P (Pacman) se mueve en la matriz según la tecla pulsada por el Usuario (W, A, S, D)
-	- El fantasma color Rojo R se mueve de forma aleatoria por el trablero usa su función mover()
-	- El fantasma de color Rosa S sale del cuadro donde se encuentran tras 5 iteraciones
-	- El fantasma de color Azul Turquesa T sale del cuadro donde se encuentran tras 25 iteraciones
-	- El fantasma de color Naranja N sale del cuadro donde se encuentran tras 50 iteraciones
-	Por ahora todos los fantasmas usan su función mover() que será de forma aleatoria, en lo que se programa un major algoritmo.
-   
-Si un fantasma toca o se sobre pone con Pacman, se termina el juego.
-
-Los elementos pueden moverse en cualquier posición del mapa sin embargo no pueden sobreponerse sobre una pared o atravesarlas `#`, por otro lado pacman
-si se encuenta con un `.` este se borra y aumenta el puntaje de Pacman, si se encuentra con un `*` los fantasmas cambian de color a blanco, esto indica que pueden ser comidos por Pacman, si Pacman se come a un fantasma, este regresa a su posición inicial.
-
-
-## Clases y Métodos
-Clase Punto: Tendra artibutros x,y que representan coordenadas y getters y setters
-Clase Pared: Tendra un atributo de tipo Punto, color y una matriz de 13x13 pixeles, será de color azul
-```
-#############
-#############
-#############
-#############
-#############
-#############
-#############
-#############
-#############
-#############
-#############
-#############
-#############
-```
-
-Clase Pallet: Tendra un atributo de tipo Punto y color y una matriz de 13x13 pixeles será de color naranja
-```
-             
-             
-             
-             
-     222     
-     222     
-     222     
-             
-             
-             
-             
-```
-
-Clase super Pallet: Tenra un atributo de tipo Punto, color y una matriz de 13x13 pixeles será de color blanco
-```
-             
-             
-             
-    22222    
-    22222    
-    22222    
-    22222    
-    22222    
-             
-             
-             
-```
-
-Clase Fantasma: Tendra un atributo de tipo Punto, color y una matriz de 13x13 pixeles será el color lo define el constructor, en todo lugar donde haya un 1, se mostrará el color del fantasma
+- La matriz lógica se procesa iterativamente; cada celda se evalúa y se instancia un objeto de la clase correspondiente.
+- La manipulación de la matriz permite simular el movimiento de los personajes. Por ejemplo:
+    - Al mover a Pac-Man (según entrada del usuario con teclas W, A, S, D), se actualiza su posición en la matriz.
+    - Si Pac-Man se mueve a una celda con un pellet (`.`), el pellet se elimina de la matriz y se incrementa el puntaje.   
+    - Si se topa con una pared (`#`), el movimiento se invalida.
+    - Los fantasmas se mueven de forma aleatoria (o siguiendo un algoritmo más sofisticado), y si entran en colisión con Pac-Man, se termina el juego.
+- Esta separación entre la lógica (la matriz de caracteres) y la representación gráfica permite simular el juego de forma simplificada, concentrándose en la mecánica de colisiones, movimiento y actualización de estados.
 
 ```
-    11111    
-  111111111  
- 11111111111 
- 11111111111 
- 11111111111 
-1111111111111
-1111111111111
-1111111111111
-1111111111111
-1111111111111
-1111111111111
-111 11111 111
- 1   1 1   1
+"############################",
+"#............##............#",
+"#.####.#####.##.#####.####.#",
+"#*####.#####.##.#####.####*#",
+"#.####.#####.##.#####.####.#",
+"#..........................#",
+"#.####.##.########.##.####.#",
+"#.####.##.########.##.####.#",
+"#......##....##....##......#",
+"######.##### ## #####.######",
+"     #.##### ## #####.#     ",
+"     #.##    R     ##.#     ",
+"     #.## ###--### ##.#     ",
+"######.## # TSN  # ##.######",
+"      .   #      #   .      ",
+"######.## #      # ##.######",
+"     #.## ######## ##.#     ",
+"     #.##          ##.#     ",
+"     #.## ######## ##.#     ",
+"######.## ######## ##.######",
+"#............##............#",
+"#.####.#####.##.#####.####.#",
+"#.####.#####.##.#####.####.#",
+"#*..##.......P........##..*#",
+"###.##.##.########.##.##.###",
+"###.##.##.########.##.##.###",
+"#......##....##....##......#",
+"#.##########.##.##########.#",
+"#.##########.##.##########.#",
+"#..........................#",
+"############################"
 ```
 
-Clase Pacman: Tendra un atrobuto Punto, color y una matriz de 13x13 pixeles será de color amarillo, en todo lugar donde haya un 1, se mostrará el color del pacman (amarrillo)}
+---
 
-Figura 1
-```
-    11111    
-  111111111  
- 11111111111
- 11111111111 
-1111111111111
-1111111111111
-1111111111111
-1111111111111
-1111111111111
- 11111111111 
- 11111111111 
-  111111111  
-    11111    
-```
+## Algoritmo de Graficación
 
-Figura 2
+La parte gráfica se encarga de transformar la representación lógica (la matriz de caracteres) en dibujos en pantalla. Los pasos principales son:
+
+1. **Interpretación de la matriz lógica:**  
+    Cada objeto posee una matriz de 13x13 caracteres que define su "sprite". Por ejemplo, la matriz de Pac-Man varía según el estado de animación (boca cerrada, semiabierta o abierta).
+
 ```
     11111    
   111111111  
@@ -333,32 +135,105 @@ Figura 2
     11111    
 ```
 
-Figura 3
+Se guarda su forma en un Vector.
+
 ```
-    1111111  
-  111111111  
- 111111111   
- 11111111    
-1111111      
-11111        
-1111
-11111        
-1111111      
- 11111111    
- 111111111   
-  111111111  
-    1111111    
-````
+vector<string> matrizDerecha = {
+	"    11111    ",
+	"  111111111  ",
+	" 11111111111 ",
+	" 11001110011 ",
+	" 10022100221 ",
+	"1100221002211",
+	"1110011100111",
+	"1111111111111",
+	"1111111111111",
+	"1111111111111",
+	"1111111111111",
+	"111 11111 111",
+	" 1   1 1   1"
+};
+```
 
-Clase Graficar usará la matriz del objeto, pero lo gráficara usando el algoritmo de Bresenham, el de Traslación, Rotación, Escalado.
-Dependiendo del numero 
-1:  Pinta con el color del objeto en la matriz de 13x13 pixeles
-2: Pinta de color azul
-3: Pinta de color Blanco 
+- `1`: Color dado por el constructor
+- `0`: Color blanco
+- `2`: Color azul
 
+Para ver todos ver todos los objetos click en [Diseño de Objetos](https://docs.google.com/spreadsheets/d/17pzVTPVUb-rS6HZ2om61W8trHnrEx1gxkTmlStIjyyQ/edit?usp=sharing).
+    
+2. **Transformación geométrica:**  
+    La clase **Graficar** se encarga de:
+    - Convertir la matriz de cada Objeto en un conjunto de puntos (usando la clase **Punto**), esto se explica más adelante.
+    - Aplicar transformaciones mediante las clases **Rotacion**, **Escalado** y **Traslacion** para ajustar la figura a la posición y orientación deseada.
+    - Dibujar los puntos resultantes en pantalla utilizando la librería **graphics.h**.
+    
+Se utiliza un algoritmo  para asegurar que cada celda de la matriz se dibuje en un área de 13x13 píxeles. Esto permite mantener la consistencia visual, ya que cada objeto se dibuja a escala y en la posición correcta.
+    
+3. **Doble Buffer y Sincronización:**  
+    Para evitar parpadeos, se utiliza la técnica de doble buffer. El mapa estático se dibuja una sola vez y se almacena en un buffer de imagen, el cual se reutiliza en cada iteración. Los elementos dinámicos (Pac-Man y los fantasmas) se actualizan sobre ese fondo, logrando una animación fluida.
+    
+4. **Algoritmo de Bresenham:**  
+    Se emplea para rellenar los objetos al graficar.
+    
 
+---
 
-En el caso del pacman el de rotación será usado según la última tecla pulsada por el usuario o la dirección hacia la que va el pacman.
-El resto de objetos se dibujan igual en la pantalla.
+## Etapas del Desarrollo
 
-### Otros algoritmos
+### 1. Análisis y Diseño
+
+- **Definición de la matriz lógica:**  
+    Se diseñó una matriz de 31 filas por 28 columnas en la que cada carácter define un elemento del juego.    
+- **Diseño orientado a objetos:**  
+    Se identificaron las clases necesarias (Punto, Pared, Pallet, SuperPallet, Fantasma, Pacman y Graficar) y se definieron sus atributos y métodos, incluyendo una matriz de 13x13 en donde se dibuja su forma, posteriormente estos valores se convierten a puntos, para hacer operaciones con ellos.
+- **Graficación**
+	Al saber que objeto hay en cada posición de la matriz del mapa, se llama a la clase `Graficacion` para que dibuje en esa zona, que se encarga de convertir la matriz del objeto a puntos, operar con ellos, y dibujarlo en esa posición.
+- **Planificación de algoritmos:**  
+    Se establecieron los algoritmos de transformación geométrica (rotación, escalado y traslación) para usarlos en la representación gráfica.
+
+### 2. Implementación
+
+- **Lógica del juego:**  
+    Se implementó la actualización de la matriz lógica para mover a Pac-Man y los fantasmas, además de gestionar colisiones y actualizaciones (por ejemplo, al comer pellets).
+- **Graficación:**  
+    Se implementó la clase Graficar para interpretar la matriz de cada objeto y dibujarlo en pantalla. Se integraron técnicas de doble buffer para evitar parpadeos.
+- **Integración de algoritmos geométricos:**  
+    Se añadieron las clases Rotacion, Escalado y Traslacion, permitiendo aplicar transformaciones a las figuras antes de ser dibujadas.
+
+### 3. Compilación y Ejecución
+
+- **Entorno de Desarrollo:**  
+    Se utiliza Visual Studio 2022 en un entorno Windows 11.
+- **Configuración:**  
+    Se incluyen las librerías necesarias (como graphics.h) y se configura el proyecto para compilar en modo x86.
+- **Compilación:**  
+    El proyecto se compila en Visual Studio sin errores y se vincula la librería graphics.lib mediante la directiva `#pragma comment(lib, "graphics.lib")`.
+- **Ejecución:**  
+    Al ejecutar el proyecto, se abre una ventana centrada en la pantalla (si se configuran las coordenadas adecuadamente) y se inicia el juego con la animación y lógica definida.
+
+![[Pasted image 20250404084029.png]]
+
+## Ejecución
+
+Para descargar y usar el juego siga las siguientes instrucciones.
+
+### Ejecutable
+
+En este mismo repositorio navegue a...
+
+```
+\Debug
+```
+
+Descargue el archivo `Pacman.exe`, de doble clic para ejecutar.
+
+### Usando Visual Studio Code
+
+Clone el repositorio, y ejecute el archivo `Pacman.cpp`.
+
+```
+https://github.com/jangelmm/Pacman.git
+```
+
+## Anexos
+- Descargar e instalar Visual Studio 2022 Community Edition y Tener las librerías de gráficos instaladas. [Descargar Visual Studio 2022 y Usar graphics.h](https://github.com/jangelmm/graphics.h-en-Visual-Studio.git).
