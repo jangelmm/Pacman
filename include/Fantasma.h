@@ -14,9 +14,11 @@ private:
     int dir; // Dirección actual
 
     // Variables para el modo azul
-    bool enModoAzul = false;  // Indica si el fantasma está en modo vulnerable
-    int contadorCambio = 0;   // Contador para alternar entre fantasmaA y fantasmaB
-    int tiempoAzul = 30;      // Duración del modo azul (ajustable)
+    bool enModoAzul = false;
+    int contadorCambio = 0;
+    int tiempoAzul = 30;
+
+    Punto posicionInicio;
 
     // Matrices de dirección
     vector<string> matrizDerecha = {
@@ -113,59 +115,61 @@ private:
     };
 
 public:
-    Fantasma(Punto pos, int color) : pos(pos), color(color), dir(0) {
-        matriz = matrizDerecha;  // Dirección inicial por defecto
+    Fantasma(Punto pos, int color)
+        : pos(pos), color(color), dir(0), posicionInicio(pos) {
+        matriz = matrizDerecha;
     }
 
     Punto getPos() const { return pos; }
     int getColor() const { return color; }
     vector<string> getMatrix() const { return matriz; }
 
-    // Activar modo azul (cuando Pac-Man come SuperPallet)
+    // Activar modo azul cuando Pacman come SuperPallet
     void activarModoAzul() {
         enModoAzul = true;
         contadorCambio = 0;
     }
 
-    // Movimiento aleatorio sin detenerse
+    // Actualizar estado del modo azul (debe llamarse en el bucle principal)
+    void actualizarModoAzul() {
+        if (enModoAzul) {
+            contadorCambio++;
+            if (contadorCambio >= tiempoAzul) {
+                enModoAzul = false;
+                color = RED;
+                matriz = matrizDerecha; // Volver a la matriz normal
+            }
+            else {
+                matriz = (contadorCambio % 2 == 0) ? fantasmaA : fantasmaB;
+            }
+        }
+    }
+
+    void regresarACeldaInicio() {
+        pos = posicionInicio;
+        enModoAzul = false;
+        color = RED;
+        matriz = matrizDerecha;
+    }
+
+    // Movimiento aleatorio
     void mover() {
         int newX = pos.getX();
         int newY = pos.getY();
 
-        if (enModoAzul) {
-            // Alternar entre fantasmaA y fantasmaB cada vez que se mueva
-            matriz = (contadorCambio % 2 == 0) ? fantasmaA : fantasmaB;
-            contadorCambio++;
+        int direccion = rand() % 4;
 
-            // Moverse aleatoriamente como antes
-            int dir = rand() % 4;
-            switch (dir) {
-            case 0: newX += 1; break;
-            case 1: newX -= 1; break;
-            case 2: newY += 1; break;
-            case 3: newY -= 1; break;
-            }
-
-            // Desactivar modo azul después de cierto tiempo
-            if (contadorCambio >= tiempoAzul) {
-                enModoAzul = false;
-            }
-        }
-        else {
-            // Movimiento normal
-            int dir = rand() % 4;
-            switch (dir) {
-            case 0: newX += 1; matriz = matrizDerecha; break;
-            case 1: newX -= 1; matriz = matrizIzquierda; break;
-            case 2: newY += 1; matriz = matrizAbajo; break;
-            case 3: newY -= 1; matriz = matrizArriba; break;
-            }
+        switch (direccion) {
+        case 0: newX += 1; if (!enModoAzul) matriz = matrizDerecha; break;
+        case 1: newX -= 1; if (!enModoAzul) matriz = matrizIzquierda; break;
+        case 2: newY += 1; if (!enModoAzul) matriz = matrizAbajo; break;
+        case 3: newY -= 1; if (!enModoAzul) matriz = matrizArriba; break;
         }
 
-        // Verificar colisión antes de moverse
         if (sePuedeMover(newX, newY)) {
             pos.setX(newX);
             pos.setY(newY);
         }
     }
 };
+

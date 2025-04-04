@@ -10,5 +10,9 @@ public:
     int getY() const { return y; }
     void setX(int x) { this->x = x; }
     void setY(int y) { this->y = y; }
+
+    bool operator==(const Punto& otro) const {
+        return x == otro.x && y == otro.y;
+    }
 };
 #pragma once
