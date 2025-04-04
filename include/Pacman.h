@@ -93,6 +93,10 @@ public:
         pos = posInicial;
     }
 
+    void setPos(Punto nuevaPos) {
+        pos = nuevaPos;
+    }
+
     // Retorna la matriz segun el estado de animacion
     vector<string> getMatrix() const {
         vector<string> matriz;

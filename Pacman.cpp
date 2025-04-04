@@ -71,17 +71,17 @@ void dibujarPacmanVida(int x, int y) {
         "  111111111  ",
         " 11111111111 ",
         " 11111111111 ",
-        "1111111111111",
-        "1111111111111",
-        "1111111111111",
-        "1111111111111",
-        "1111111111111",
+        "1111111111   ",
+        "1111111      ",
+        "1111         ",
+        "1111111      ",
+        "11111111111  ",
         " 11111111111 ",
         " 11111111111 ",
         "  111111111  ",
         "    11111    "
     };
-    int pixelSize = 2;
+    int pixelSize = 1;
     for (size_t i = 0; i < 13; i++) {
         for (size_t j = 0; j < matriz[i].size(); j++) {
             if (matriz[i][j] == '1') {
@@ -184,14 +184,18 @@ int main() {
         pacman.avanzar();
 
         // Manejar túnel teletransportador (horizontal)
+        // Manejar túnel teletransportador (horizontal)
         int x = pacman.getPos().getX();
         int y = pacman.getPos().getY();
-        if (x < 0) {
-            pacman = Pacman(Punto(COLS - 1, y));
+        if (y == 14) {  // Solo en la fila del túnel
+            if (x == 0) {
+                pacman.setPos(Punto(COLS - 1, y)); // <- Cambiar posición, no crear nuevo objeto
+            }
+            else if (x == COLS - 1) {
+                pacman.setPos(Punto(0, y)); // <- Cambiar posición, no crear nuevo objeto
+            }
         }
-        else if (x >= COLS) {
-            pacman = Pacman(Punto(0, y));
-        }
+        
 
         // Colisiones con Pellets:
         // Si Pac-Man está en la misma celda que un Pallet, se elimina el Pallet,
