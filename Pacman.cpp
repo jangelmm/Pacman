@@ -71,11 +71,11 @@ void dibujarPacmanVida(int x, int y) {
         "  111111111  ",
         " 11111111111 ",
         " 11111111111 ",
-        "1111111111   ",
-        "1111111      ",
-        "1111         ",
-        "1111111      ",
-        "11111111111  ",
+        "1111111111111",
+        "1111111111111",
+        "1111111111111",
+        "1111111111111",
+        "1111111111111",
         " 11111111111 ",
         " 11111111111 ",
         "  111111111  ",
@@ -135,7 +135,7 @@ int main() {
     vector<Pallet> pallets;
     vector<SuperPallet> superPallets;
     vector<Fantasma> fantasmas;
-    vector<Vacio> vacios;  // Vector para guardar las zonas vacías (pellets comidos)
+    vector<Vacio> vacios;  // Vector para guardar las zonas vacías (pellets y superpellets comidos)
     Pacman pacman(Punto(0, 0));
 
     // Crear objetos a partir del mapa lógico
@@ -195,13 +195,13 @@ int main() {
 
         // Colisiones con Pellets:
         // Si Pac-Man está en la misma celda que un Pallet, se elimina el Pallet,
-        // se suma el puntaje y se añade un objeto Vacio en esa celda para repintar con negro.
+        // se suma el puntaje y se añade un objeto Vacio en esa celda para repintar en negro.
         for (auto it = pallets.begin(); it != pallets.end(); ) {
             if (pacman.getPos().getX() == it->getPos().getX() &&
                 pacman.getPos().getY() == it->getPos().getY()) {
-                Vacio vacio(it->getPos()); // Crear objeto Vacio en esa celda
+                Vacio vacio(it->getPos());
                 vacios.push_back(vacio);
-                it = pallets.erase(it);  // Eliminar el Pallet consumido
+                it = pallets.erase(it);
                 pacman.sumarPuntaje(10);
             }
             else {
@@ -209,13 +209,17 @@ int main() {
             }
         }
 
-        // Colisiones con SuperPallets
+        // Colisiones con SuperPallets:
+        // Se aplica la misma lógica que con los Pallets:
+        // al comer el SuperPallet, se añade un objeto Vacio para repintar la zona en negro,
+        // se activa el modo de ataque y se cambia el color de los fantasmas.
         for (auto it = superPallets.begin(); it != superPallets.end(); ) {
             if (pacman.getPos().getX() == it->getPos().getX() &&
                 pacman.getPos().getY() == it->getPos().getY()) {
+                Vacio vacio(it->getPos());
+                vacios.push_back(vacio);
                 it = superPallets.erase(it);
                 pacman.activarModoAtacar();
-                // Cambiar el color de los fantasmas (modo azul)
                 for (auto& fantasma : fantasmas) {
                     fantasma.activarModoAzul();
                 }
@@ -230,12 +234,10 @@ int main() {
             if (pacman.getPos().getX() == fantasma.getPos().getX() &&
                 pacman.getPos().getY() == fantasma.getPos().getY()) {
                 if (pacman.getModoAtacar()) {
-                    // Pac-Man come al fantasma: reiniciar el fantasma y sumar puntos
                     fantasma.resetear();
                     pacman.sumarPuntaje(200);
                 }
                 else {
-                    // Pac-Man pierde una vida y regresa a la posición inicial
                     pacman.perderVida(posInicial);
                 }
             }
@@ -245,11 +247,10 @@ int main() {
         setactivepage(currentPage);
         putimage(0, 0, bufferMapa, COPY_PUT); // Restaurar el mapa estático
 
-        // Dibujar objetos vacíos (pellets comidos) para repintar la zona en negro
+        // Dibujar objetos vacíos (zonas repintadas en negro)
         for (auto& vacio : vacios) {
             Graficar::dibujar(vacio);
         }
-
         // Dibujar elementos dinámicos
         for (auto& fantasma : fantasmas) {
             Graficar::dibujar(fantasma);
