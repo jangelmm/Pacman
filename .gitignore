@@ -18,7 +18,7 @@ mono_crash.*
 
 # Build results
 [Dd]ebug/
-!Debug/Pacman.exe # Borrar en Caso de Error
+![Dd]ebug/Pacman.exe  # Permite solo este .exe # Borrar en Caso de Error
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
