@@ -202,9 +202,10 @@ int main() {
         if (kbhit()) {
             int tecla = getch();
             if (tecla == 27) running = false;
-            else pacman.mover(tecla);
+            else pacman.cambiarDireccion(tecla);
         }
 
+        pacman.mover();
         // Detectar si Pac-Man se come un SuperPallet
         for (size_t i = 0; i < superPallets.size(); i++) {
             if (pacman.getPos().getX() == superPallets[i].getPos().getX() &&

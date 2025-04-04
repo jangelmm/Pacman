@@ -1,4 +1,3 @@
-#pragma once
 #include <vector>
 #include <string>
 #include "Punto.h"
@@ -10,13 +9,16 @@ class Pacman {
 private:
     Punto pos;
     int color;
-    int frame; // Para animación
+    int frame; // Para la animación
     double angulo; // Ángulo de rotación
+    char direccionActual; // Dirección de movimiento actual
+
 public:
-    Pacman(Punto pos) : pos(pos), color(YELLOW), frame(0), angulo(0.0) {}
+    Pacman(Punto pos) : pos(pos), color(YELLOW), frame(0), angulo(0.0), direccionActual('d') {}
+
     Punto getPos() const { return pos; }
     int getColor() const { return color; }
-    double getAngulo() const { return angulo; } // Nuevo método para obtener el ángulo
+    double getAngulo() const { return angulo; }
 
     // Retorna la matriz según el estado de animación
     vector<string> getMatrix() const {
@@ -50,7 +52,7 @@ public:
                 "1111111      ",
                 "1111         ",
                 "1111111      ",
-                "11111111111 ",
+                "11111111111  ",
                 " 11111111111 ",
                 " 11111111111 ",
                 "  111111111  ",
@@ -80,26 +82,46 @@ public:
 
     void actualizarFrame() { frame++; }
 
-    // Movimiento según tecla (W, A, S, D) con rotación
-    void mover(char tecla) {
-        int newX = pos.getX();
-        int newY = pos.getY();
+    // Actualiza la dirección de movimiento basada en la tecla presionada
+    void cambiarDireccion(char tecla) {
         switch (tecla) {
         case 'w': case 'W':
-            newY -= 1;
+            direccionActual = 'w';
             angulo = 270; // Rotación hacia arriba
             break;
         case 's': case 'S':
-            newY += 1;
+            direccionActual = 's';
             angulo = 90; // Rotación hacia abajo
             break;
         case 'a': case 'A':
-            newX -= 1;
+            direccionActual = 'a';
             angulo = 180; // Rotación hacia la izquierda
             break;
         case 'd': case 'D':
-            newX += 1;
+            direccionActual = 'd';
             angulo = 0; // Rotación hacia la derecha
+            break;
+        default:
+            break;
+        }
+    }
+
+    // Mueve a Pac-Man en la dirección actual
+    void mover() {
+        int newX = pos.getX();
+        int newY = pos.getY();
+        switch (direccionActual) {
+        case 'w':
+            newY -= 1;
+            break;
+        case 's':
+            newY += 1;
+            break;
+        case 'a':
+            newX -= 1;
+            break;
+        case 'd':
+            newX += 1;
             break;
         default:
             break;
@@ -111,3 +133,4 @@ public:
         }
     }
 };
+
