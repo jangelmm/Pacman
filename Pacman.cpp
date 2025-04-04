@@ -100,7 +100,7 @@ void dibujarHUD(int vidas, int puntaje) {
         dibujarPacmanVida(pacmanX + (i * 30), pacmanY);
     }
     char buffer[100];
-    sprintf(buffer, "PUNTUACION: %d        HIGH SCORE: 10000", puntaje);
+    sprintf(buffer, "PUNTUACION: %d        HIGH SCORE: 1000", puntaje);
     char titulo[] = "Pacman";
     settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 2);
     outtextxy(10, baseY + 40, titulo);
@@ -264,6 +264,17 @@ int main() {
         pacman.actualizarFrame();
         for (auto& fantasma : fantasmas) {
             fantasma.mover();
+        }
+
+        bool algunFantasmaAzul = false;
+        for (auto& fantasma : fantasmas) {
+            if (fantasma.estaEnModoAzul()) {
+                algunFantasmaAzul = true;
+                break;
+            }
+        }
+        if (!algunFantasmaAzul) {
+            pacman.desactivarModoAtacar();
         }
     }
 

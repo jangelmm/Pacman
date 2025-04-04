@@ -175,4 +175,8 @@ public:
     void resetear() {
         pos = posInicial;
     }
+
+	boolean estaEnModoAzul() {
+		return enModoAzul;
+	}   
 };
