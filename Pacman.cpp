@@ -108,6 +108,22 @@ void dibujarHUD(int vidas, int puntaje) {
     outtextxy(10, baseY + 70, buffer);
 }
 
+void dibujarFIN(int vidas, int puntaje) {
+    setcolor(WHITE);
+    int baseY = ROWS * CELL_SIZE + 10;
+    int pacmanX = 10, pacmanY = baseY;
+    for (int i = 0; i < vidas; i++) {
+        dibujarPacmanVida(pacmanX + (i * 30), pacmanY);
+    }
+    char buffer[100];
+    sprintf(buffer, "PUNTUACION: %d        HIGH SCORE: 1000", puntaje);
+    char titulo[] = "GAME OVER | Reinicie el Juego";
+    settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 2);
+    outtextxy(10, baseY + 40, titulo);
+    settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 1);
+    outtextxy(10, baseY + 70, buffer);
+}
+
 // Dibuja el mapa estático en una página
 void dibujarMapaEstatico(const vector<Pared>& paredes,
     const vector<Pallet>& pallets,
@@ -280,7 +296,13 @@ int main() {
         if (!algunFantasmaAzul) {
             pacman.desactivarModoAtacar();
         }
+        if (pallets.size() == 0 || pacman.getVidas() == 0) {
+            break;
+        }
     }
+
+    dibujarFIN(pacman.getVidas(), pacman.getPuntaje());
+	system("pause");
 
     free(bufferMapa);
     closegraph();
