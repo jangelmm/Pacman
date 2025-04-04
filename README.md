@@ -213,7 +213,7 @@ Se utiliza un algoritmo  para asegurar que cada celda de la matriz se dibuje en 
 - **Ejecución:**  
     Al ejecutar el proyecto, se abre una ventana centrada en la pantalla (si se configuran las coordenadas adecuadamente) y se inicia el juego con la animación y lógica definida.
 
-![[Pasted image 20250404084029.png]]
+![](Images/Imagen5.png)
 
 ## Ejecución
 
