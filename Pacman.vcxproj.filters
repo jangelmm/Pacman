@@ -59,5 +59,8 @@
     <ClInclude Include="include\Constantes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Vacio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

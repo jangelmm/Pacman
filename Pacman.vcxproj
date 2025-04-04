@@ -143,6 +143,7 @@
     <ClInclude Include="include\Rotacion.h" />
     <ClInclude Include="include\SuperPallet.h" />
     <ClInclude Include="include\Traslacion.h" />
+    <ClInclude Include="include\Vacio.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

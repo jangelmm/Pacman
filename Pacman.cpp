@@ -14,6 +14,7 @@
 #include "include/SuperPallet.h"
 #include "include/Fantasma.h"
 #include "include/Pacman.h"
+#include "include/Vacio.h"       // Incluir la nueva clase Vacio
 #include "include/Graficar.h"
 #include "include/Colisiones.h"
 
@@ -60,12 +61,11 @@ const char* mapa[ROWS] = {
     "############################"
 };
 
-// Definición de la función para dibujar una vida con forma de Pac-Man semiabierto
+// Dibuja un icono de vida (mini Pac-Man semiabierto)
 void dibujarPacmanVida(int x, int y) {
     setcolor(YELLOW);
     setfillstyle(SOLID_FILL, YELLOW);
-
-    // Matriz de Pac-Man semiabierto
+    // Matriz de Pac-Man semiabierto (13x13)
     string matriz[13] = {
         "    11111    ",
         "  111111111  ",
@@ -81,40 +81,32 @@ void dibujarPacmanVida(int x, int y) {
         "  111111111  ",
         "    11111    "
     };
-
-    int pixelSize = 2; // Tamaño del píxel para formar la figura
-
+    int pixelSize = 2;
     for (size_t i = 0; i < 13; i++) {
         for (size_t j = 0; j < matriz[i].size(); j++) {
             if (matriz[i][j] == '1') {
-                bar(x + j * pixelSize, y + i * pixelSize, x + (j + 1) * pixelSize, y + (i + 1) * pixelSize);
+                bar(x + j * pixelSize, y + i * pixelSize,
+                    x + (j + 1) * pixelSize, y + (i + 1) * pixelSize);
             }
         }
     }
 }
 
-void dibujarHUD(int vidas) {
+void dibujarHUD(int vidas, int puntaje) {
     setcolor(WHITE);
-
     int baseY = ROWS * CELL_SIZE + 10;
-
-    // Dibujar iconos de vidas
-    int pacmanX = 10;
-    int pacmanY = baseY;
+    int pacmanX = 10, pacmanY = baseY;
     for (int i = 0; i < vidas; i++) {
         dibujarPacmanVida(pacmanX + (i * 30), pacmanY);
     }
-
-    // Mostrar texto debajo de las vidas
-    char puntuacion[] = "PUNTUACION: 00        HIGH SCORE: 10000"; // OJO: Modificar aqui para actualizar puntuacion
+    char buffer[100];
+    sprintf(buffer, "PUNTUACION: %d        HIGH SCORE: 10000", puntaje);
     char titulo[] = "Pacman";
-
     settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 2);
     outtextxy(10, baseY + 40, titulo);
     settextstyle(SANS_SERIF_FONT, HORIZ_DIR, 1);
-    outtextxy(10, baseY + 70, puntuacion);
+    outtextxy(10, baseY + 70, buffer);
 }
-
 
 // Dibuja el mapa estático en una página
 void dibujarMapaEstatico(const vector<Pared>& paredes,
@@ -127,30 +119,26 @@ void dibujarMapaEstatico(const vector<Pared>& paredes,
 
 int main() {
     srand(time(0));
-    
-    int offsetHUD = 100; // Espacio para el HUD en la parte inferior
+    int offsetHUD = 100;
     int width = COLS * CELL_SIZE;
-    int height = ROWS * CELL_SIZE + offsetHUD + 10; // Se aumentó la altura total
+    int height = ROWS * CELL_SIZE + offsetHUD + 10;
 
-    // Obtener resolución de la pantalla
+    // Centrar la ventana en pantalla
     int screenWidth = GetSystemMetrics(SM_CXSCREEN);
     int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-
-    // Calcular coordenadas para centrar la ventana
     int xPos = (screenWidth - width) / 2;
     int yPos = (screenHeight - height) / 2;
-
-    // Inicializar la ventana en el centro de la pantalla
     initwindow(width, height, "Pac-Man", xPos, yPos);
 
-    // Vectores de elementos del juego
+    // Inicialización de objetos del juego
     vector<Pared> paredes;
     vector<Pallet> pallets;
     vector<SuperPallet> superPallets;
     vector<Fantasma> fantasmas;
+    vector<Vacio> vacios;  // Vector para guardar las zonas vacías (pellets comidos)
     Pacman pacman(Punto(0, 0));
 
-    // Crear objetos en base al mapa
+    // Crear objetos a partir del mapa lógico
     for (int i = 0; i < ROWS; i++) {
         string linea = mapa[i];
         for (int j = 0; j < COLS; j++) {
@@ -169,7 +157,7 @@ int main() {
         }
     }
 
-    // Capturar el mapa en un buffer
+    // Capturar el mapa estático en un buffer para doble buffer
     void* bufferMapa = malloc(imagesize(0, 0, width, height));
     setactivepage(0);
     cleardevice();
@@ -178,46 +166,103 @@ int main() {
 
     int currentPage = 1;
     bool running = true;
-    int vidas = 4; // Número de vidas inicial
+    Punto posInicial = pacman.getPos();
 
     while (running) {
+        // Procesar entrada: cambiar dirección (sin detener el avance)
+        if (kbhit()) {
+            int tecla = getch();
+            if (tecla == 27) {
+                running = false;
+            }
+            else {
+                pacman.mover(tecla);
+            }
+        }
+
+        // Avanzar continuamente en la dirección actual
+        pacman.avanzar();
+
+        // Manejar túnel teletransportador (horizontal)
+        int x = pacman.getPos().getX();
+        int y = pacman.getPos().getY();
+        if (x < 0) {
+            pacman = Pacman(Punto(COLS - 1, y));
+        }
+        else if (x >= COLS) {
+            pacman = Pacman(Punto(0, y));
+        }
+
+        // Colisiones con Pellets:
+        // Si Pac-Man está en la misma celda que un Pallet, se elimina el Pallet,
+        // se suma el puntaje y se añade un objeto Vacio en esa celda para repintar con negro.
+        for (auto it = pallets.begin(); it != pallets.end(); ) {
+            if (pacman.getPos().getX() == it->getPos().getX() &&
+                pacman.getPos().getY() == it->getPos().getY()) {
+                Vacio vacio(it->getPos()); // Crear objeto Vacio en esa celda
+                vacios.push_back(vacio);
+                it = pallets.erase(it);  // Eliminar el Pallet consumido
+                pacman.sumarPuntaje(10);
+            }
+            else {
+                ++it;
+            }
+        }
+
+        // Colisiones con SuperPallets
+        for (auto it = superPallets.begin(); it != superPallets.end(); ) {
+            if (pacman.getPos().getX() == it->getPos().getX() &&
+                pacman.getPos().getY() == it->getPos().getY()) {
+                it = superPallets.erase(it);
+                pacman.activarModoAtacar();
+                // Cambiar el color de los fantasmas (modo azul)
+                for (auto& fantasma : fantasmas) {
+                    fantasma.activarModoAzul();
+                }
+            }
+            else {
+                ++it;
+            }
+        }
+
+        // Colisiones con Fantasmas
+        for (auto& fantasma : fantasmas) {
+            if (pacman.getPos().getX() == fantasma.getPos().getX() &&
+                pacman.getPos().getY() == fantasma.getPos().getY()) {
+                if (pacman.getModoAtacar()) {
+                    // Pac-Man come al fantasma: reiniciar el fantasma y sumar puntos
+                    fantasma.resetear();
+                    pacman.sumarPuntaje(200);
+                }
+                else {
+                    // Pac-Man pierde una vida y regresa a la posición inicial
+                    pacman.perderVida(posInicial);
+                }
+            }
+        }
+
+        // Dibujo con doble buffer:
         setactivepage(currentPage);
-        putimage(0, 0, bufferMapa, COPY_PUT); // Restaurar el mapa desde el buffer
+        putimage(0, 0, bufferMapa, COPY_PUT); // Restaurar el mapa estático
+
+        // Dibujar objetos vacíos (pellets comidos) para repintar la zona en negro
+        for (auto& vacio : vacios) {
+            Graficar::dibujar(vacio);
+        }
 
         // Dibujar elementos dinámicos
-        for (auto& f : fantasmas) Graficar::dibujar(f);
+        for (auto& fantasma : fantasmas) {
+            Graficar::dibujar(fantasma);
+        }
         Graficar::dibujar(pacman);
-
-        // Dibujar la información en pantalla
-        dibujarHUD(vidas);
-
+        dibujarHUD(pacman.getVidas(), pacman.getPuntaje());
         setvisualpage(currentPage);
         currentPage = 1 - currentPage;
 
         delay(100);
         pacman.actualizarFrame();
-        for (auto& f : fantasmas) f.mover();
-
-        // Manejo de entrada del usuario
-        if (kbhit()) {
-            int tecla = getch();
-            if (tecla == 27) running = false;
-            else pacman.mover(tecla);
-        }
-
-        // Detectar si Pac-Man se come un SuperPallet
-        for (size_t i = 0; i < superPallets.size(); i++) {
-            if (pacman.getPos().getX() == superPallets[i].getPos().getX() &&
-                pacman.getPos().getY() == superPallets[i].getPos().getY()) {
-
-                // Borrar SuperPallet
-                superPallets.erase(superPallets.begin() + i);
-
-                // Activar modo azul en todos los fantasmas
-                for (auto& fantasma : fantasmas) {
-                    fantasma.activarModoAzul();
-                }
-            }
+        for (auto& fantasma : fantasmas) {
+            fantasma.mover();
         }
     }
 

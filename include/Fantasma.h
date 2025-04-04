@@ -9,6 +9,7 @@ using namespace std;
 class Fantasma {
 private:
     Punto pos;
+    Punto posInicial; // Posición inicial del fantasma
     int color;
     vector<string> matriz;
     int dir; // Dirección actual
@@ -113,7 +114,8 @@ private:
     };
 
 public:
-    Fantasma(Punto pos, int color) : pos(pos), color(color), dir(0) {
+    // Constructor: inicializa la posición y guarda la posición inicial
+    Fantasma(Punto pos, int color) : pos(pos), posInicial(pos), color(color), dir(0) {
         matriz = matrizDerecha;  // Dirección inicial por defecto
     }
 
@@ -137,7 +139,7 @@ public:
             matriz = (contadorCambio % 2 == 0) ? fantasmaA : fantasmaB;
             contadorCambio++;
 
-            // Moverse aleatoriamente como antes
+            // Moverse aleatoriamente
             int dir = rand() % 4;
             switch (dir) {
             case 0: newX += 1; break;
@@ -167,5 +169,10 @@ public:
             pos.setX(newX);
             pos.setY(newY);
         }
+    }
+
+    // Nuevo método: reinicia la posición del fantasma a la posición inicial
+    void resetear() {
+        pos = posInicial;
     }
 };
