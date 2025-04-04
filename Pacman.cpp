@@ -213,15 +213,29 @@ int main() {
         }
 
         // Manejo de colisiones con SuperPallets
-        superPallets.erase(remove_if(superPallets.begin(), superPallets.end(),
-            [&](SuperPallet& sp) {
-                if (pacman.getPos() == sp.getPos()) {
-                    puntaje += 50;
-                    return true;
-                }
-                return false;
-            }), superPallets.end());
+        
+        for (auto it = superPallets.begin(); it != superPallets.end(); ) {
+            if (pacman.getPos() == it->getPos()) {
+                puntaje += 50;
 
+                // Borrar el superPallet visualmente
+                setcolor(BLACK);
+                setfillstyle(SOLID_FILL, BLACK);
+                bar(it->getPos().getX() * CELL_SIZE, it->getPos().getY() * CELL_SIZE,
+                    (it->getPos().getX() + 1) * CELL_SIZE, (it->getPos().getY() + 1) * CELL_SIZE);
+
+                it = superPallets.erase(it);
+            }
+            else {
+                ++it;
+            }
+
+            for (auto& f : fantasmas) {
+                f.actualizarModoAzul();
+                f.mover();  // Esto internamente decide si moverse rápido o no
+            }
+
+        }
 
         // Detectar si Pac-Man se come un fantasma
         for (size_t i = 0; i < fantasmas.size(); i++) {

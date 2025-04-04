@@ -128,6 +128,7 @@ public:
     void activarModoAzul() {
         enModoAzul = true;
         contadorCambio = 0;
+
     }
 
     // Actualizar estado del modo azul (debe llamarse en el bucle principal)
@@ -154,16 +155,25 @@ public:
 
     // Movimiento aleatorio
     void mover() {
+        if (enModoAzul) {
+            moverRapidoAleatorio();  // Se moverá dos veces para hacerlo más rápido
+        }
+        else {
+            moverNormal();
+        }
+    }
+
+    void moverNormal() {
         int newX = pos.getX();
         int newY = pos.getY();
 
         int direccion = rand() % 4;
 
         switch (direccion) {
-        case 0: newX += 1; if (!enModoAzul) matriz = matrizDerecha; break;
-        case 1: newX -= 1; if (!enModoAzul) matriz = matrizIzquierda; break;
-        case 2: newY += 1; if (!enModoAzul) matriz = matrizAbajo; break;
-        case 3: newY -= 1; if (!enModoAzul) matriz = matrizArriba; break;
+        case 0: newX += 1; matriz = matrizDerecha; break;
+        case 1: newX -= 1; matriz = matrizIzquierda; break;
+        case 2: newY += 1; matriz = matrizAbajo; break;
+        case 3: newY -= 1; matriz = matrizArriba; break;
         }
 
         if (sePuedeMover(newX, newY)) {
@@ -171,5 +181,43 @@ public:
             pos.setY(newY);
         }
     }
+
+    void moverRapidoAleatorio() {
+        for (int i = 0; i < 2; ++i) { // Moverse dos veces
+            int newX = pos.getX();
+            int newY = pos.getY();
+            int direccion = rand() % 4;
+
+            switch (direccion) {
+            case 0: newX += 1; break;
+            case 1: newX -= 1; break;
+            case 2: newY += 1; break;
+            case 3: newY -= 1; break;
+            }
+
+            if (sePuedeMover(newX, newY)) {
+                pos.setX(newX);
+                pos.setY(newY);
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 };
 
