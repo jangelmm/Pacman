@@ -161,6 +161,8 @@ vector<string> matrizDerecha = {
 
 Para ver todos ver todos los objetos click en [Diseño de Objetos](https://docs.google.com/spreadsheets/d/17pzVTPVUb-rS6HZ2om61W8trHnrEx1gxkTmlStIjyyQ/edit?usp=sharing).
     
+![](Images/Imagen4.png)
+
 2. **Transformación geométrica:**  
     La clase **Graficar** se encarga de:
     - Convertir la matriz de cada Objeto en un conjunto de puntos (usando la clase **Punto**), esto se explica más adelante.

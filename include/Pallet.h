@@ -5,7 +5,7 @@
 
 using namespace std;
 
-#define ORANGE 0xFFA500 // Define ORANGE color code
+#define CREMA COLOR(255, 248, 220)  // Código RGB para crema cálido (#FFF8DC)
 
 class Pallet {
 private:
@@ -13,7 +13,7 @@ private:
     int color;
     vector<string> matriz;
 public:
-    Pallet(Punto pos) : pos(pos), color(ORANGE) {
+    Pallet(Punto pos) : pos(pos), color(CREMA) {
         matriz = {
             "             ",
             "             ",
