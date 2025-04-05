@@ -19,7 +19,7 @@ private:
 
 public:
     // Constructor: inicializa en posición, color, dirección y con puntaje 0, 5 vidas y modo de ataque false
-    Pacman(Punto pos) : pos(pos), color(YELLOW), frame(0), angulo(0.0), direccion(0), puntaje(0), vidas(5), modoAtacar(false) {}
+    Pacman(Punto pos) : pos(pos), color(YELLOW), frame(0), angulo(0.0), direccion(0), puntaje(0), vidas(4), modoAtacar(false) {}
 
     Punto getPos() const { return pos; }
     int getColor() const { return color; }
