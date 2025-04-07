@@ -215,6 +215,8 @@ Se utiliza un algoritmo  para asegurar que cada celda de la matriz se dibuje en 
 
 ![](Images/Imagen5.png)
 
+>Para mover a Pacman use las teclas `W, A, S, D`
+
 ## Ejecución
 
 Para descargar y usar el juego siga las siguientes instrucciones.
